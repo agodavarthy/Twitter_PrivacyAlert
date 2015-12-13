@@ -59,7 +59,8 @@ def writeTweets2File(user_id, user_tweets_obj, outfile_fd):
 
 def main():
           auth_set = int(sys.argv[1])
-	  input_fileno = sys.argv[2]
+	  input_file = sys.argv[2]
+	  output_file = sys.argv[3]
 	  
 	  if(auth_set < 1 or auth_set > 20):
 		print "Auth key:", auth_set, " is invalid"
@@ -67,11 +68,8 @@ def main():
 	  api, auth = get_access_tokens(auth_set)
 	  print 'Using the auth set %d' % auth_set
 	  ts = get_time_stamp()
-	  path = "/data/shared/twitter/UOIUserProfiles/"
-	  input_filename = "DataToAnalyze/NegSamples/NoMaritalUniqueIDs_"+input_fileno+".txt" 
-	  input_user_profile_fd = open(path+input_filename, 'r')
-	  output_filename = "tweets/NegSamples/tweets_"+input_fileno+"_"+ts+".json" 
-	  output_user_profile_fd = open(path+output_filename, 'w')
+	  input_user_profile_fd = open(input_file, 'r')
+	  output_user_profile_fd = open(output_file, 'w')
          
 	  for line in input_user_profile_fd.readlines():
 		try:
@@ -89,9 +87,6 @@ def main():
 				print user_id, ":",reason 
 				time.sleep(60)
 			pass
-		except pymongo.errors.DuplicateKeyError as pe:
-			print "pymongo duplicate error:", user_id
-			pass	
 	  output_user_profile_fd.close()
 
 main()
